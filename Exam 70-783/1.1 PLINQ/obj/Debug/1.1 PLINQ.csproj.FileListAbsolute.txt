@@ -1,0 +1,12 @@
+C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao2\Exam 70-783\1.1 PLINQ\bin\Debug\1.1 PLINQ.exe.config
+C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao2\Exam 70-783\1.1 PLINQ\bin\Debug\1.1 PLINQ.exe
+C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao2\Exam 70-783\1.1 PLINQ\bin\Debug\1.1 PLINQ.pdb
+C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao2\Exam 70-783\1.1 PLINQ\obj\Debug\1.1 PLINQ.csprojResolveAssemblyReference.cache
+C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao2\Exam 70-783\1.1 PLINQ\obj\Debug\1.1 PLINQ.exe
+C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao2\Exam 70-783\1.1 PLINQ\obj\Debug\1.1 PLINQ.pdb
+C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao\Exam 70-783\1.1 PLINQ\bin\Debug\1.1 PLINQ.exe.config
+C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao\Exam 70-783\1.1 PLINQ\obj\Debug\1.1 PLINQ.exe
+C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao\Exam 70-783\1.1 PLINQ\obj\Debug\1.1 PLINQ.pdb
+C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao\Exam 70-783\1.1 PLINQ\bin\Debug\1.1 PLINQ.exe
+C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao\Exam 70-783\1.1 PLINQ\bin\Debug\1.1 PLINQ.pdb
+C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao\Exam 70-783\1.1 PLINQ\obj\Debug\1.1 PLINQ.csprojResolveAssemblyReference.cache
