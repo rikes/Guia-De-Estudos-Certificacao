@@ -1,6 +1,0 @@
-C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao\AsyncProgram\obj\Debug\AsyncProgram.csprojResolveAssemblyReference.cache
-C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao\AsyncProgram\bin\Debug\AsyncProgram.exe.config
-C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao\AsyncProgram\bin\Debug\AsyncProgram.exe
-C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao\AsyncProgram\bin\Debug\AsyncProgram.pdb
-C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao\AsyncProgram\obj\Debug\AsyncProgram.exe
-C:\Users\henri\OneDrive\Documentos\Visual Studio 2015\Projects\Guia-De-Estudos-Certificao\AsyncProgram\obj\Debug\AsyncProgram.pdb
