@@ -35,6 +35,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.lblDecrypt = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -100,11 +101,21 @@
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(178, 179);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Encrypt Text";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(457, 383);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.lblDecrypt);
             this.Controls.Add(this.label3);
@@ -128,6 +139,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lblDecrypt;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.Label label2;
     }
 }
 

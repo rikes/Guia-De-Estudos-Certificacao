@@ -28,7 +28,7 @@ namespace _3._2_X509Certificates
         {
             txtCertInfo.Text = string.Empty;
 
-            X509Store store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
+            X509Store store = new X509Store(StoreName.Root, StoreLocation.CurrentUser);
             store.Open(OpenFlags.ReadOnly);
 
             StringBuilder sb = new StringBuilder();
@@ -36,7 +36,7 @@ namespace _3._2_X509Certificates
 
             foreach(X509Certificate2 certificate in store.Certificates)
             {
-                sb.AppendFormat("{0}\t{1}{2}", certificate.FriendlyName, certificate.NotAfter, Environment.NewLine);
+                sb.AppendFormat("{0}\t{1}\t{2}", certificate.FriendlyName, certificate.NotAfter, Environment.NewLine);
             }
             store.Close();
 

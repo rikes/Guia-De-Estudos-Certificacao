@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using System.Security.Cryptography;
@@ -36,9 +30,11 @@ namespace _3._2_ProtectedData
             {
                 // encrypt data
                 byte[] data = System.Text.Encoding.Default.GetBytes(txtEncrypt.Text);
+
                 try
                 {
                     encryptedData = ProtectedData.Protect(data, null, DataProtectionScope.CurrentUser);
+                    //this.label2.Text = System.Text.Encoding.Default.GetString(data) + "\n" + System.Text.Encoding.Default.GetString(encryptedData);
                     MessageBox.Show("Encryption Successful!");
                 }
                 catch(CryptographicException ex)

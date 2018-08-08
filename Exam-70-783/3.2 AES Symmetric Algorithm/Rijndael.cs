@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 using System.IO;
- 
+
  /*
  Creditos: DevMedia
  Algoritimo Rijndael para criptografia SIMÉTRICA (AES)
@@ -18,10 +16,10 @@ namespace _3._2_AES_Symmetric_Algorithm
 
     public static class CriptografiaHelper
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Heelooo");
-        }
+        //static void Main3(string[] args)
+        //{
+        //    Console.WriteLine("Heelooo");
+        //}
         
         private static Rijndael CriarInstanciaRijndael(string chave, string vetorInicializacao)
         {
