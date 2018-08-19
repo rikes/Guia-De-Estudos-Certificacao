@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace _2._1_Extension_Methods
 {
-    public static class IntExtensions // class must be public and static for extension methods
+    // Para extensão do método devemos dizer seu tipo, ser público e estático
+    //A diferença para um método estático comum é u uso do this
+    public static class IntExtensions 
     {
         public static int Half(this int x)
         {

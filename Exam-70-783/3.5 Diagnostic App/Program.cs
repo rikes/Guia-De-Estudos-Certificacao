@@ -60,9 +60,9 @@ namespace _3._5_Diagnostic_App
         {
             // Create a file for output named LogTrace.txt.
             //Stream myFile = File.Create(@"..\\..\\Log\\LogTrace.txt");
-            Trace.AutoFlush = true;//Libera o conteudo automaticamente
+            Trace.AutoFlush = true;//Libera o conteudo automaticamentem
 
-            /* Create a new text writer using the output stream, and add it to
+            /* Create a new i writer using the output stream, and add it to
              * the trace listeners.
              */
             TextWriterTraceListener myTextListener = new TextWriterTraceListener(myFile);

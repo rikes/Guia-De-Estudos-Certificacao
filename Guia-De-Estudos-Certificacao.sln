@@ -120,6 +120,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3.5 Diagnostic App", "Exam-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3.5 Analyze UseCPU", "Exam-70-783\3.5 Analyze UseCPU\3.5 Analyze UseCPU.csproj", "{A62AA7DC-0D30-416A-9107-34AFEEF69B68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3.5 Perfomance Counter", "Exam-70-783\3.5 Perfomance Counter\3.5 Perfomance Counter.csproj", "{EAF32B42-41D9-4F35-90D1-07B2A76A5DE3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -342,6 +344,10 @@ Global
 		{A62AA7DC-0D30-416A-9107-34AFEEF69B68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A62AA7DC-0D30-416A-9107-34AFEEF69B68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A62AA7DC-0D30-416A-9107-34AFEEF69B68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAF32B42-41D9-4F35-90D1-07B2A76A5DE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAF32B42-41D9-4F35-90D1-07B2A76A5DE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAF32B42-41D9-4F35-90D1-07B2A76A5DE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAF32B42-41D9-4F35-90D1-07B2A76A5DE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -401,5 +407,6 @@ Global
 		{C33A70E4-7D17-4CFA-947E-1C3A53DE1F7E} = {B9350AAB-2463-458C-9353-0BDB5F8A716B}
 		{9810EF59-1F78-42FA-99BF-47EBE69C2FDB} = {B9350AAB-2463-458C-9353-0BDB5F8A716B}
 		{A62AA7DC-0D30-416A-9107-34AFEEF69B68} = {B9350AAB-2463-458C-9353-0BDB5F8A716B}
+		{EAF32B42-41D9-4F35-90D1-07B2A76A5DE3} = {B9350AAB-2463-458C-9353-0BDB5F8A716B}
 	EndGlobalSection
 EndGlobal

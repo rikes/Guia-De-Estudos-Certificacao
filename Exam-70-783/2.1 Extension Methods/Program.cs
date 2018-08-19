@@ -12,8 +12,11 @@ namespace _2._1_Extension_Methods
         {
             int num1 = 100;
             int answer1 = num1.Add100();
+            DateTime date = DateTime.Now;
 
             Console.WriteLine("Half: {0}, Add100: {1}", num1.Half(), num1.Add100());
+            Console.WriteLine("Mês e ano corrente: {0}", date.MesAno());
+
             Console.ReadLine();
         }
     }

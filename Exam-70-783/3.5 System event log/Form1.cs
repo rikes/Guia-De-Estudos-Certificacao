@@ -26,7 +26,7 @@ namespace _3._5_System_event_log
             string message = txtEvent.Text;
             int id = int.Parse(txtId.Text);
 
-            // create the source if necessary (requires admin privileges)
+            
             if(!EventLog.SourceExists(source))
             {
                 EventLog.CreateEventSource(source, log);
