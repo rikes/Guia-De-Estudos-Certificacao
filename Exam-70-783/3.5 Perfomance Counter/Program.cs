@@ -26,8 +26,6 @@ namespace _3._5_Perfomance_Counter
                     }
                 } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
             }
-
-
         }
     }
 }
