@@ -10,7 +10,8 @@ namespace _3._5_System_event_log
     static class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// App que grava um registro de eventos no Windows no programa "Visualizador de eventos" (Requer adm)
+        /// 
         /// </summary>
         [STAThread]
         static void Main()

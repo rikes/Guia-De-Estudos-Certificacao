@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("3.3 Manage Assemblies")]
+[assembly: AssemblyTitle("2.2 Boxing and UnBoxing")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("3.3 Manage Assemblies")]
+[assembly: AssemblyProduct("2.2 Boxing and UnBoxing")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c33a70e4-7d17-4cfa-947e-1c3a53de1f7e")]
+[assembly: Guid("e47fa3b4-5969-4585-b08a-dee304a17c7f")]
 
 // Version information for an assembly consists of the following four values:
 //
