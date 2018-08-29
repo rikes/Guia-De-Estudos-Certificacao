@@ -26,7 +26,11 @@ namespace _2._4_IComparable
                 throw new ArgumentException("Object is not a Person");
             }
 
-            return _age.CompareTo(p._age);
+            //Ordenação ocorre aqui
+            //Caso queiramos o inverso(classificação da idade decremental) 
+            //Inverteríamos:
+            return p.Age.CompareTo(this._age);
+            //return this._age.CompareTo(p._age);
         }
     }
 }
