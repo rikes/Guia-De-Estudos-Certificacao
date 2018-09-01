@@ -41,13 +41,13 @@ Os tipos de ponteiro são raramente usados. Você os usa somente quando estiver 
 
 O *Enum* é um tipo especial básico por valor para o c#, exemplo
 
-```CSHARP
+```csharp
 enum Days: byte {Sat = 1, dom, seg, ter, qua, qui, sex};
 ```
 Por *Default* os enumerados iniciando em 0 e vão se incrementando, mas podemos indicar com qual número ele vai iniciar.
 Caso seja necessário uma comparação, poderemos fazer da seguinte maneira:
 
-```CSHARP
+```csharp
 Days day = Days.Sat; 
 if ((byte) day == 1) 
     {
@@ -70,7 +70,7 @@ Muitas das vezes a definição de função está relacionado com um método. A v
 Contrutores podem receber diversos tipos de parametros em métodos, podemos até definir valores durante a definição e chamada do método.
 Chamamos isso de Parâmetros opcionais e/ou nomeados.
 
-``` CSHARP
+```csharp
 void MyMethod(int firstArgument, string secondArgument = "default value",
     bool thirdArgument = false) { }
 
@@ -85,7 +85,7 @@ No exemplo podemos passar ou não o segundo ou terceiro parâmetro.
 
 Através da palavra *this* podemos chamar métodos também utilizando o simbolo de *':'* e caso exista, atenndedo os parametros
 
-``` CSHARP
+```csharp
     public class ConstructorChaining
     {
         private int _p;
@@ -158,7 +158,7 @@ Vamos falar sobre dois tipos de conversões:
 - Explícita
 Com a conversão **explícita** precisamos informar ao compilador, qual será o tipo de retorno. Fazendo um cast do tipo. Obs.: Nesses casos o compilador entende que você sabe o que esta fazendo,
 caso a conversão não seja possível uma exeção será lançada.
-``` CSHARP
+```csharp
 int a = (int) 12,37 
 //a == 12
 ```
@@ -168,7 +168,7 @@ https://docs.microsoft.com/pt-br/dotnet/csharp/language-reference/keywords/expli
 - Implícita
 Uma conversão implícita não precisa de nenhuma sintaxe especial. Pode ser executado porque o compilador sabe que a conversão é permitida e que é seguro converter.
 
-``` CSHARP
+```csharp
 int i = 42;
 double d = i;
 ```
@@ -254,7 +254,7 @@ Sempre que implementar a **IEnumerable** terá que implementar de alguma forma, 
 
 O fato do **IEnumerable** iterar sobre uma classe nos lembra um requisito minímo para utilização do **ForEach**, ser uma lista *iteravél*. O **ForEach** está usando internamente os métodos **GetEnumerator** e **MoveNex**.
 
-``` CSHARP
+```csharp
 //MoveNext() returna 'true' se houver novos elementos e 'false' caso não haja
 //'Current' seria o objeto atual,´o tipo já se sabe(no caso string), pois foi definido no Using
 //A função GetEnumerator em um IEnumerable retorna um IEnumerator .
@@ -274,6 +274,126 @@ Será visto no 2.6
 
 
 ## 2.5 Reflection
+
+Uma aplicação .NET não contém apenas código e dados; Ela também contém metadados, que são informações sobre os dados. 
+No .NET, isso significa que um aplicativo contém o código que define o aplicativo e os dados que descrevem o código. 
+Um **atributo(Attribute)** é um tipo de metadado que pode ser armazenado em um aplicativo .NET. Outros tipos de metadados contêm informações sobre os tipos, código, assembly e todos os outros elementos armazenados em seu aplicativo.
+*Reflection* é o processo de recuperar esses metadados em tempo de execução. Os dados podem ser inspecionados e usados para tomar decisões.
+
+
+### Attributes
+
+Os *Attributes* podem ser usados para descrever as informações do autor de uma assembly ou para fornecer dicas específicas ao compilador sobre como otimizar seu código, perante os atributos definidos. 
+Atributos personalizados podem armazenar todos os tipos de dados que você deseja. No .Net, você aplica um atributo colocando o nome do atributo entre colchetes ([]) acima da declaração à qual deseja aplicar o atributo.
+Um bom exemplo é o atributo **[Serializable]**, com sua utilização podemos armazenar um objeto em um arquivo (xml, json,txt...), para que seja possível sua recuperação. Lembrando que: 
+- "A **Serialização** é o processo de converter um objeto em uma sequência linear de bytes que podem ser armazenados ou transferidos."
+ 
+
+### Reflection
+
+O Reflection, no .NET, é uma funcionalidade em que é possível ler os dados de um objeto quanto à sua classe, ou seja, obtendo informações em tempo de execução sobre:
+- Propriedades da classe;
+- Métodos;
+- Outros valores.
+
+### Lambda
+Uma expressão lambda é uma **função anônima** que você pode usar para criar delegados ou tipos de árvore de expressão. Ao usar expressões lambda, você pode escrever funções locais que podem ser passadas como argumentos ou retornadas como o valor de chamadas de função. 
+Expressões lambda são particularmente úteis para escrever expressões de consulta LINQ.
+
+Para criar uma expressão lambda, especifique os parâmetros de entrada (se houver) no lado esquerdo do operador lambda **=>** e coloque a expressão ou o bloco de instruções do outro lado. 
+Por exemplo, a expressão lambda ```x => x * x``` especifica um parâmetro chamado **x** e retorna o valor de **x ao quadrado**. Exemplo:
+
+```csharp
+delegate int del(int i);  
+static void Main(string[] args)  
+{  
+    del myDelegate = x => x * x;  
+    int j = myDelegate(5); // Exibe: j = 25  
+} 
+```
+
+Nos fontes há mais exemplos de exmpressões lambda.
+
+#### Func
+
+**Func** é usado para determinar um *delegate*. Ou seja é para tipar (criar uma assinatura) uma função anônima. 
+Nele é especificado os tipos de diversos parâmetros e o tipo do retorno da função.
+
+```csharp
+var operacoes = new Dictionary<string, Func<int, int, int>> {
+    {"+", (op1, op2) => op1 + op2 },
+    {"-", (op1, op2) => op1 - op2 },
+    {"*", (op1, op2) => op1 * op2 },
+    {"/", (op1, op2) => op1 / op2 }
+};
+Write(operacoes["+"](10, 20)); //imprime 30
+```
+No exemplo acima, a função terá dois parâmetros inteiros e seu retorno também será um inteiro. Por isso criamos uma função de três inteiros.
+
+
+#### Action
+
+**Action** é uma *Func* que não terá um retorno, ou seja, é função anônima que retorna nada (seria o tipo *void*). Ela faz uma ação ao invés de dar um resultado, como costuma acontecer com funções
+
+```csharp
+var acoes = new Dictionary<string, Action<int>> {
+    {"Criar", (parametro) => Criar(parametro) },
+    {"Editar", (parametro) => Editar(parametro) },
+    {"Apagar", (parametro) => Apagar(parametro) },
+    {"Imprimir", (parametro) => Imprimir(parametro) }
+};
+acoes["Criar"](1); //executará o método Criar
+```
+No exemplo acima só teremos uma função com um parâmetro inteiro.
+
+
+#### Predicate
+
+**Predicate** é uma *Func* que retorna um *bool*. Hoje ele não é muito necessário. *Func* resolve já resolveria, porém use se quiser realmente indicar que aquilo não é uma função qualquer, mas sim um predicado (critério para um filtro). 
+**Predicate** só pode ter um parâmetro. Os dois tipos anteriores permitem até 16 parâmetros já que existem vários tipos com assinaturas diferentes.
+
+```csharp
+var compareZero = new Dictionary<string, Predicate<int>> {
+    {">", (x) => x > 0 },
+    {"<", (x) => x < 0 },
+    {"=", (x) => x == 0 }
+};
+Write(compareZero["="](5)); //imprimirá False
+```
+
+O exemplo acima só passa um parâmetro, pois predicados só aceitam um memso :P.
+
+
+
+#### Árvores de Expressão
+
+Árvores de expressão representam código em uma estrutura de dados de árvore, onde cada nó é, por exemplo, uma expressão, uma chamada de método ou uma operação binária como ```x < y```
+Existe um código exemplo no repósitorio, use debug para entender melhor a execução do código.
+
+
+
+
+## Cap 2.6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -302,7 +422,7 @@ As classes Trace e Debug fornecem os meios para monitorar e examinar o desempenh
 --- 
 Durante o desenvolvimento, use os métodos de saída da classe Debug para exibir mensagens na janela de Saída do IDE:
 
-``` CSHARP
+```csharp
 System.Diagnostics.Trace.WriteLine("Hello World!");  
 System.Diagnostics.Debug.WriteLine("Hello World!");  
 ```
@@ -348,7 +468,7 @@ Podemos alterar o ouvinte do nosso rastreamento, qunado falo ouvinte podemos ent
 Obs.: **Rastreamento de código** – Se refere ao Recebimento de mensagens informativas sobre a execução de um aplicativo em tempo de execução.
 
 
-``` CSHARP
+```csharp
 Debug.WriteLine(“Starting application”);
 Debug.Indent();
 int i = 1 + 2;
