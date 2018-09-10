@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace _2._6_IDisposable
 {
+    //https://docs.microsoft.com/pt-br/dotnet/standard/garbage-collection/implementing-dispose
     class Program
     {
         static void Main(string[] args)
