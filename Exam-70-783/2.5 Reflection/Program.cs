@@ -12,50 +12,76 @@ namespace _2._5_Reflection
     {
         static void Main(string[] args)
         {
-            // with reflection
-            object dog = Activator.CreateInstance(typeof(Dog));
-            PropertyInfo[] properties = typeof(Dog).GetProperties();
-            PropertyInfo numberOfLegsProperty1 = properties[0];
+            // A ideia eh fazer um sisteminha de log, na qual independente da classe informada parametro conseguiremos obter informações
+            // sobre a classe. Perceba que a classe equipamento tem um campo a mais se comparado a outras duas classes
+            Dog dog = new Dog(8, "Bidu");
+            Pessoa pessoa = new Pessoa(28,"Henrique Santana");
+            Equipamento eqp = new Equipamento(4,"Furadeira","Furadeira com função parafusadeira reversivel");
 
-            // or
-            PropertyInfo numberOfLegsProperty2 = null;
-            foreach(PropertyInfo propertyInfo in properties)
-            {
-                if(propertyInfo.Name.Equals("numberoflegs", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    numberOfLegsProperty2 = propertyInfo;
-                }
-            }
+            //Exibir informações das classes criadas;
+            Log(dog);
+            Log(pessoa);
+            Log(eqp);
 
-            numberOfLegsProperty1.SetValue(dog, 3, null);
-
-            Console.WriteLine(numberOfLegsProperty2.GetValue(dog, null));
-
-            // use reflection to invoke different constructors
-
-            var defaultConstructor = typeof(Dog).GetConstructor(new Type[0]);
-            var legConstructor = typeof(Dog).GetConstructor(new[] { typeof(int) });
-
-            var defaultDog = (Dog)defaultConstructor.Invoke(null);
-            Console.WriteLine(defaultDog.NumberOfLegs);
-
-            var legDog = (Dog)legConstructor.Invoke(new object[] { 5 });
-            Console.WriteLine(legDog.NumberOfLegs);
 
             Console.ReadLine();
         }
-    }
 
+        public static void Log(object pParametro)
+        {
+            var tipo = pParametro.GetType();
+            var log = new StringBuilder();
+
+            log.AppendLine("Data: " + DateTime.Now);
+
+            //Usamos GetProperties que obter todas as propriedades publicas do objeto
+            foreach (var item in tipo.GetProperties())
+            {
+                //Obtemos o nome que foi definido o atributo/propriedade
+                //Pegamos o valor desse atributo informando a INSTANCIA do nosso objeto
+                log.AppendLine(item.Name + ": " + item.GetValue(pParametro));
+            }
+
+            Console.WriteLine(log);
+
+        }
+    }
+    
     internal class Dog
     {
-        public int NumberOfLegs { get; set; }
-        public Dog()
+        public int Idade { get; set; }
+        public string Nome { get; set; }
+        
+        public Dog(int pIdade, string pNome)
         {
-            NumberOfLegs = 4;
+            this.Idade = pIdade;
+            this.Nome = pNome;
         }
-        public Dog(int legs)
+    }
+
+    internal class Pessoa
+    {
+        public int Idade { get; set; }
+        public string Nome { get; set; }
+
+        public Pessoa(int pIdade, string pNome)
         {
-            NumberOfLegs = legs;
+            this.Idade = pIdade;
+            this.Nome = pNome;
+        }
+    }
+
+    internal class Equipamento
+    {
+        public int Idade { get; set; }
+        public string Nome { get; set; }
+        public string Descricao { get; set; }
+
+        public Equipamento(int pIdade, string pNome, string pDescricao)
+        {
+            this.Idade = pIdade;
+            this.Nome = pNome;
+            this.Descricao = pDescricao;
         }
     }
 }
