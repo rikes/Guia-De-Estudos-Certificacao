@@ -373,39 +373,185 @@ Existe um código exemplo no repósitorio, use debug para entender melhor a exec
 
 
 
-## Cap 2.6
+## Cap 2.6 Manage the object life
+
+
+### Garbagge collection
+
+
+No CLR (Common Language Runtime), o coletor de lixo atua como um gerenciador automático de memória. Ele oferece os seguintes benefícios:
+
+- Permite que você desenvolva seu aplicativo sem a necessidade de liberar memória.
+
+- Aloca objetos no heap gerenciado com eficiência.
+
+- Recupera os objetos que não estão sendo usados, limpa a memória e mantém a memória disponível para alocações futuras. Os objetos gerenciados obtêm automaticamente conteúdo limpo com o qual começar, portanto, seus construtores não precisam inicializar cada campo de dados.
+
+- Fornece segurança de memória, assegurando que um objeto não possa usar o conteúdo de outro objeto.
+
+Diferentemente do C++, a linguagem C# existe o *Garbagge collection*, que faz todo o gerenciamento da alocação e liberação de memória para recursos gerenciados.
+Aoi decorrer do desenvolvimento de software, poderemos lidar com recursos não gerenciados pelo GC, como conexões de bancos de dados, conexão de rede e manipulação de arquivos. Neste casos,
+é imprescindível o próprio desenvolvedor fazer a liberação dos recursos alocados o mais rápido possível. Os erros mais comuns ao não liberar tais recursos: "Este arquivo está em uso por outro processo" ou
+"Não foi possível conectar ao banco de dados, verifique se há conexões disponíveis".
+
+Há dois lugares na memória em que o CLR armazena itens enquanto seu código é executado. Uma é a pilha; o outro é o heap . A pilha controla o que está sendo executado em seu código, e o heap controla seus objetos. O heap é gerenciado pelo coletor de lixo.
+
+Existe dois tipos de objetos considerando esse contexto, managed e unmanaged.
+
+- Objetos managed são aqueles que estão sendo controlados diretamente pelo garbage collector. Ou seja, objetos de classes do seu sistema normalmente são managed;
+- Objetos unmanaged são o inverso. Um provider de banco de dados, por exemplo, escrito em uma DLL que não seja do .NET. Normalmente objetos assim possuem um procedimento próprio de liberação de memória , especificado pelo provedor da tecnologia.
+
+#### Finally
+
+Os problemas citados anteriormente ao manipular recursos não gerenciados, podem ser evitados. O C# disponibiliza o conceito de *finally*. O propósito de uma instrução *finally* é garantir que a limpeza necessária de objetos, normalmente objetos que estão mantendo recursos externos.
+Um exemplo dessa limpeza é chamar Close em um FileStream imediatamente após o uso, em vez de esperar que o objeto passe pela coleta de lixo feita pelo Common Language Runtime.
+
+A instrução using garante que *Dispose* seja sempre chamado. Todo tipo que implementa *IDisposable* deve ser usado em uma instrução *using* sempre que possível. Dessa forma, você garante a limpeza de todos os recursos não gerenciados.
+Portanto não será necessário chamar a instrunção *finally*.
+
+A instrunção é *using* tem a mesma finalidade da *finally* no exemplo abaixo:
+
+```csharp
+using (FileStream fs = new FileStream("teste.txt", FileMode.Create)) {
+    // Algum código...
+}
+```
+É o mesmo que:
+
+```csharp
+{
+    FileStream fs = new FileStream("teste.txt", FileMode.Create);
+    try {
+       // Algum código...
+    } finally {
+        if (fs != null)
+            ((IDisposable)fs).Dispose();
+    }
+}
+```
+
+**Obs.:**  O coletor de lixo é bastante inteligente no gerenciamento de memória e não é recomendado que você chame **GC.Collect**
 
 
 
 
 
+#### IDISPOSABLE
+
+
+Uma grande observação deve ser feitaq sobre tudo o que foi dito anteriormente neste capítulo. 
+**Liberação de recursos é diferente de liberação de memória. O *garbage collector* libera a memória quando ele puder e achar necessário. Ele não libera recursos.**
+
+Todas as classes que precisam desta liberação devem implementar a interface *IDisposable*, ou seja, precisa criar uma implementação do método *Dispose()* que encerrará a vinculação do recurso com a aplicação. Por isso é comum que a implementação chame o método *Close()*.
+
+
+O coletor de lixo do *Common Language Runtime* recupera a memória usada por objetos gerenciados, mas os tipos que usam recursos não gerenciados implementam a interface *IDisposable* para permitir que a memória alocada para esses recursos não gerenciados seja recuperada.
+Após terminar de usar um objeto que implementa *IDisposable*, você deverá chamar a implementação de *IDisposable.Dispose()* do objeto. Você pode fazer isso de duas maneiras:
+
+Com a instrução using do C# ou a instrução Using do Visual Basic.
+
+Implementando um bloco try/finally.
+
+Criar seu próprio tipo personalizado que implementa *IDisposable* e um finalizador corretamente não é uma tarefa trivial.
+
+Maiores detalhes e exemplos olhar o fonte e a especificação:
+https://docs.microsoft.com/pt-br/dotnet/standard/garbage-collection/implementing-dispose
 
 
 
 
+## Cap 2.7 Strings
+
+Uma string em C # é um objeto do tipo String cujo valor é text. O objeto string contém uma matriz de objetos Char internamente. Uma string tem uma propriedade Length que mostra o número de objetos Char que ela contém. 
+String é um tipo de referência que se parece com o tipo de valor (por exemplo, os operadores de igualdade == e ! = Estão sobrecarregados para comparar em valor, não em referência).
+
+Em C #, você pode se referir a uma string como String e string . Você pode usar qualquer convenção de nomenclatura adequada a você. A palavra-chave string é apenas um alias para a String do .NET Framework.
+Uma das características especiais de uma string é que ela é imutável , portanto ela não pode ser alterada depois de criada. Toda mudança em uma string irá criar uma nova string.
+
+Ao trabalhar com um número tão grande de operações de string, você deve ter em mente que string é imutável e que o .NET Framework oferece algumas classes auxiliares especiais ao lidar com strings.
+
+### Manipulando cadeias de *String*
 
 
+```csharp
+string s = string.Empty(); 
+
+for (int i = 0; i <10000; i ++) 
+{ 
+    s + = "x"; 
+}
+```
+Esse código será executado 10.000 vezes e, a cada vez, criará uma nova string. 
+A referência 's' apontará apenas para o **último** item, portanto, todas as outras sequências estão imediatamente prontas para a coleta de lixo.
+O código acima parece simples, mas utiliza muita memória de maneira desnecessária
+Ao trabalhar com um número tão grande de operações de string, você deve ter em mente que string é imutável e que o .NET Framework oferece algumas classes auxiliares especiais ao lidar com strings.
 
 
+#### StringBuilder 
+
+ 
+A classe *System.Text.StringBuilder* pode ser usada quando você deseja modificar uma cadeia de caracteres sem criar um novo objeto. Por exemplo, o uso da classe *StringBuilder* pode melhorar o desempenho ao concatenar várias cadeias de caracteres em um loop.
+
+```csharp
+//Cria uma instancia d estringBuilder
+StringBuilder sb = new StringBuilder (string.Empty); 
+
+for (int i = 0; i <10000; i ++) 
+{ 
+    sb.Append ("x"); 
+}
+```
+
+Uma coisa a ter em mente é que o StringBuilder nem sempre dá melhor desempenho. Ao concatenar uma série fixa de cadeias de caracteres, o compilador pode otimizar isso e combinar operações de concatenação individuais em uma única operação.
+
+#### StringWriter and StringReader
+
+Algumas APIs no .NET Framework esperam que um **TextWriter** ou **TextReader** funcione. Essas APIs não podem trabalhar diretamente com uma **string** ou **StringBuilder**. Devido a isso, o .NET Framework adiciona uma classe **StringReader** e **StringWriter**. 
+Essas classes adaptam a interface do **StringBuilder** para que possam ser usadas em locais onde um **TextWriter** ou **TextReader** é esperado.
+
+Exemplo: Usando um StringWriter como saída para um XmlWriter
+
+```csharp
+var stringWriter = new StringWriter();
+using (XmlWriter writer = XmlWriter.Create(stringWriter))
+{
+    writer.WriteStartElement("book");
+    writer.WriteElementString("price", "19.95");
+    writer.WriteEndElement();
+    writer.Flush();
+}
+string xml = stringWriter.ToString();
+```
+
+The value of xml is now:
 
 
+```xml 
+< ?xml version=\"1.0\" encoding=\"utf-16\"?>
+    < book>
+        < price>19.95</price>
+    < /book>
+```
+
+#### Cultura do App
+
+O *CultureInfo* classe contém informações específicas de cultura, como o idioma, país/região, calendário e convenções culturais. Essa classe também fornece as informações necessárias para executar operações específicas de cultura, como casing, formatação de datas e números e comparação de seqüências de caracteres.
+
+```csharp
+double cost = 1234.56;
+Console.WriteLine(cost.ToString("C",
+                  new System.Globalization.CultureInfo("en-US")));
+// Displays $1,234.56
+```
+
+Fornecer o *CultureInfo* correto é importante ao formatar valores. Ele contém todas as informações necessárias sobre como um determinado tipo é exibido nessa cultura. Da mesma forma, é importante ter certeza de que, quando você salvar valores em um banco de dados; por exemplo, você faz isso de uma maneira insensível à cultura. 
+Se os dados insensíveis à cultura forem carregados, eles poderão ser formatados dependendo do usuário que estiver visualizando os dados.
 
 
+#### IFormattable e IFormatProvider 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Ao formatar strings, você também pode usar um *IFormatProvider* . O *IFormatProvider* tem um método, *GetFormat(Type)* , que retorna informações específicas de formatação para formatar um tipo. Todos os objetos CultureInfo implementam *IFormatProvider* . O objeto *CultureInfo* retorna um *NumberFormatInfo* ou *DateTimeFormatInfo* específico da cultura se uma string ou DateTime formatado.
+Dessa forma, você pode formatar uma string como cultura específica, passando um objeto *CultureInfo* para o *ToString* método.
 
 # Parte 3 Debug and security
 
