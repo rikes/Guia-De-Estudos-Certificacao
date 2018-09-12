@@ -666,3 +666,92 @@ no *Log de Eventos* do próprio Windows. Para tal utilizaremos a classe *EventLo
 
 Os logs gerados pelo código do repósitorio poderão ser visualizados no *Visualizador de Eventos do Windows'
 É possível também ler os logs gerados através da classe *EventLogEntry*
+
+
+
+
+# Implement Data Access
+
+
+## Cap 4.1 I/O
+
+### Trabalhando com arquivos e diretórios
+
+Todos os tipos necessários podem ser encontrados no namespace System.IO.
+
+#### Driver
+
+Um objeto DriveInfo não possui nenhum método específico para lidar com unidades (por exemplo, não há um método de ejeção para um CD player). 
+Ele possui várias propriedades para acessar informações, como o nome da unidade, o tamanho e o espaço livre disponível. Como no exemplo abaixo e nos fontes.
+
+```csharp
+DriveInfo[] drivesInfo = DriveInfo.GetDrives();
+```
+
+
+
+#### Directory
+
+
+Uma unidade contém uma lista de diretórios e arquivos. Para trabalhar com esses itens, você pode usar o objeto DirectoryInfo ou a classe Directory estática . Ambas as classes oferecem acesso à sua estrutura de pastas. Ao executar apenas uma única operação em seu sistema de arquivos, pode ser mais eficiente usar a classe Directory estática.
+Quando você deseja executar várias operações em uma pasta, DirectoryInfo é uma escolha melhor.
+
+
+```csharp
+var directory = Directory.CreateDirectory(@"C:\Temp\Directory");
+
+var directoryInfo = new DirectoryInfo(@"C:\Temp\DirectoryInfo");
+directoryInfo.Create();
+
+```
+
+Outro método que pode ser útil é o método **MoveTo** nas classes **DirectoryInfo** ou **Move** de **Directory** quando você deseja mover um diretório existente para um novo local.
+
+```csharp
+Directory.Move(@"C:\source", @"c:\destination");
+
+DirectoryInfo directoryInfo = new DirectoryInfo(@"C:\Source");
+directoryInfo.MoveTo(@"C:\destination");
+```
+
+
+#### File
+
+Diretórios são necessários apenas para dar alguma estrutura aos arquivos que eles precisam armazenar. Assim como com **Directory**, você pode usar a classe **File** estático e/ou um objeto **FileInfo** para acessar arquivos.
+
+Para abrirmos o arquivo *read.txt* para leitura, utilizamos o código a seguir:
+
+```csharp
+Stream entrada = File.Open("read.txt", FileMode.Open);
+```
+Como podemoves ver no código acima, é retornado um vetor de bytes através da classe **Stream**, mas no caso queremos ler texto. Para tal, poderemos usar as  classes *StreamReader* e *StreamWriter*, para leitura e escrita
+respectivamente.
+
+```csharp
+StreamWriter writer = new StreamWriter(arquivoStream);
+writer.WriteLine("Aqui esta meu texto");
+```
+
+Criando um arquivo:
+```csharp
+using (FileStream fs = File.Create(@"C:\temp2\numeros.txt"))
+```
+No exemplo acima, caso escrevamos algo, precisaremos trabalhar com um array de bytes. No repósitorio a mais exemplos.
+
+Lembrando que estamos trabalhando com recursos não gerenciados, precisamos fechar os arquivos. Logo podemos chamar o método **Close** da classe **File** ou usar a instrunçao **Using**.
+
+#### Path
+
+A classe estática Path que pode ser encontrada em System.IO tem alguns métodos auxiliares para lidar com esses tipos de situações.
+
+```csharp
+string path = @"C:\temp2\arquivo.txt";
+
+Console.WriteLine(Path.GetDirectoryName(path)); // Displays C:\temp2
+Console.WriteLine(Path.GetExtension(path)); // Displays .txt
+Console.WriteLine(Path.GetFileName(path)); // Displays arquivo.txt
+Console.WriteLine(Path.GetPathRoot(path)); // Displays C:\
+```
+
+**Obs.:** Sempre use a classe Path ao combinar várias strings para formar um caminho.
+
