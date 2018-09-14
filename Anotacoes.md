@@ -755,3 +755,165 @@ Console.WriteLine(Path.GetPathRoot(path)); // Displays C:\
 
 **Obs.:** Sempre use a classe Path ao combinar várias strings para formar um caminho.
 
+### I/O Async
+
+Utilizamos a instrução *File.Exists* que retorna um booleano para verificar s eum arquivo existe ou não. Mas ao criar um arquivo, podemos asegurar 
+que este diretório existe ou não? Ou até mesmo tem permissão de acesso?
+Não, porque você não é o único usuário que acessa o sistema de arquivos. Enquanto você está trabalhando com o sistema de arquivos, alguns outros usuários estão fazendo exatamente a mesma coisa. Talvez eles removam a pasta que você deseja usar para criar um novo arquivo. Ou, de repente, eles alteram as permissões em um arquivo para que você não possa mais acessá-lo.
+
+Normalmente, ao lidar com uma situação em que vários usuários acessam recursos compartilhados, começamos a usar um mecanismo de bloqueio para sincronizar o uso de recursos. C # tem um mecanismo de bloqueio que você pode usar para sincronizar o acesso ao código quando vários encadeamentos estiverem envolvidos. Isso garante que um determinado código não possa ser executado simultaneamente no mesmo momento.
+Todo o código que você viu até agora neste capítulo é chamado de código *síncrono*.
+Quando trabalahos com aplicativos que possuem uma interface gráfica, como WPF ou Windows Store, o app trabalha com uma thread responsável por gerenciar a interface com o usuário.
+Se por algum motivo essa thread parar de responder, o tela de exibição vai parar de responder. O problema é que muitos usuários fecham a aplicação pensando que o sistema travou, quando 
+na verdade pode estar aguardando algum tipo de solicitação.
+É importante executar tarefas de longa duração em outras threads.
+
+#### Async / Wait in Files
+
+**Async/await** é um sinal para o compilador que você deseja executar algum código assíncrono.
+É importante saber que a classe estática *File* não oferece suporte a I/O de forma assíncrona real. Para uma I/O assíncrona real, você precisa usar o objeto *FileStream* e passar um valor *true* para o parâmetro useAsync.
+
+O método abaixo *WriteAsync* é marcado com o modificador *async* para sinalizar ao compilador que você deseja alguma ajuda para transformar seu código e, finalmente, usar a palavra-chave *await* na tarefa retornada.
+
+
+```csharp
+public  async Task CreateAndWriteAsyncFile()
+{
+    using (FileStream fileStream = new FileStream("teste.txt", FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
+    {
+        byte[] data = new byte[100000];
+        new Random().NextBytes(data);
+
+        await stream.WriteAsync(data, 0, data.Length);
+    }
+}
+```
+Explicação:
+O construtor de *FileStream*, está passando o nome do arquivo, o que faremos com o arqivo no caso criar, o tipo de acesso, se o arquivo será compartilhado, o tamanho do buffer e por último se será *assincrono*
+
+O objeto *Task* retornado representa algum trabalho em andamento, encapsulando o estado da operação assíncrona. Eventualmente, o objeto *Task* retorna o resultado da operação ou exceções que foram levantadas de forma assíncrona.
+Neste método não há nenhum valor a ser retornado ao responsável pela chamada. É por isso que o *WriteAsync* retorna um objeto *Task* comum. Quando um método tem um valor de retorno, ele retorna **Task<T>** , onde **T** é o tipo do valor retornado.
+
+No exemplo abaixo, o método retorna uma **Task<string>** , o que significa que, eventualmente, quando o processo é concluído, um valor de string está disponível.
+
+```csharp
+public async Task ReadAsyncHttpRequest()
+{
+    HttpClient client = new HttpClient();
+    string result = await client.GetStringAsync("http://www.google.com.br");
+}
+```
+Sempre que a linguagem fornecer métodos Async equivaletnes, dê prioridade ao seu uso. Isso retorna uma melhor experiência ao usuário e evita possíveis exceções, mas cuidado.
+
+**Task.WhenAll**
+Podemos esperar todas as solicitações que estão sendo executadas de forma **paralela**, para tal usamos o método *WhenAll()* da classe *Task*.
+Assim que você chamar **GetStringAsync** , a operação assíncrona é iniciada. No entanto, você não espera imediatamente pelo resultado. Em vez disso, você permite que todas as três solicitações sejam iniciadas e, em seguida, você espera que elas sejam concluídas. 
+
+Exemplo.:
+```csharp
+public async Task ExecuteMultipleRequestsInParallel()
+{
+    HttpClient client = new HttpClient();
+
+    Task google = client.GetStringAsync("http://www.google.com");
+    Task msdn =  client.GetStringAsync("http://msdn.microsoft.com");
+    Task blogs = client.GetStringAsync("http://blogs.msdn.com/");
+
+    await Task.WhenAll(google, msdn, blogs);
+}
+```
+
+### WebRequest, WebResponse, WebClient and HttpClient in System.Net
+
+
+O .NET Framework tem suporte para permitir que seus aplicativos se comuniquem através de uma rede. O namespace *System.Net* define um grande número de classes que ocultam a complexidade de executar operações de rede e, ao mesmo tempo, fornecer uma interface fácil de usar.
+
+De todos esses membros, os que você provavelmente usará são o *WebRequest* e o *WebResponse* . Essas classes são classes base abstratas que oferecem suporte para comunicação em uma rede. Implementações específicas definem o protocolo a ser usado para comunicação.
+Por exemplo, você pode usar *HttpWebRequest* e *HttpWebResponse* ao usar o protocolo HTTP.
+
+O *WebRequest* e o *WebResponse* formam um par de classes que você pode usar em conjunto para enviar uma solicitação de informações e, em seguida, receber a resposta com os dados solicitados.
+
+Um *WebRequest* é criado usando um método *Create* estático na classe *WebRequest*. O método *Create* inspeciona o endereço que você passa para ele e, em seguida, seleciona a implementação correta do protocolo. 
+Se você passasse o endereço **http://www.microsoft.com** para ele, veria que você está trabalhando com o protocolo *HTTP* e retornaria um *HttpWebRequest*.
+Depois de criar o *WebRequest* correto, você pode definir outras propriedades, como instruções de autenticação ou armazenamento em cache.
+
+Quando você terminar de redigir sua solicitação, chame o método GetResponse para executar a solicitação e recuperar a resposta.
+
+```csharp
+WebRequest request = WebRequest.Create("http://www.microsoft.com");
+WebResponse response = request.GetResponse();
+
+StreamReader responseStream = new StreamReader(response.GetResponseStream());
+string responseText = responseStream.ReadToEnd();
+
+Console.WriteLine(responseText); // Exibe o HTML do site da Microsoft
+
+response.Close();
+```
+O problema é que para fazer um simples *request* precisamos de 5 linhas de código. 
+
+
+A classe *WebClient* é uma abstração de alto nível construída no topo do *HttpWebRequest* para simplificar as tarefas mais simples envolvidas nas requisições HTTP.``
+Ela fornece métodos para enviar dados ou receber dados de qualquer recurso identificado pela URI; seja local , intranet ou internet. 
+
+```csharp
+var cliente = new WebClient();
+var text = cliente.DownloadString("http:/msdn.net");
+Console.WriteLine(text); // Exibe o HTML do site da Microsoft
+```
+
+
+A classe **HttpClient** usa o novo padrão orientada a tarefa (*Task*) para lidar com solicitações assíncronas, possibilitando assim, gerenciar e coordenar de forma mais fácil solicitações pendentes;
+
+```csharp
+HttpClient cliente = new HttpClient();
+string resultado = await cliente.GetStringAsync("http://www.docs.microsoft.net");
+
+Console.WriteLine(resultado); // Exibe o HTML do site da Microsoft
+```
+
+### Dados de consumo
+
+O gerenciamento de dados é um dos aspectos mais importantes de um aplicativo. Imagine que você pode criar apenas aplicativos que armazenem seus dados na memória. Assim que o usuário sai, todos os dados são perdidos e os lançamentos subsequentes exigem a reentrada de todos os dados necessários. Claro, isso seria uma situação impossível de se trabalhar.
+
+#### Conectando ao banco de dados
+
+Dependendo do tipo de aplicativo, você usa o arquivo app.config ou web.config . Esses arquivos podem ser usados para armazenar todos os tipos de configurações para um aplicativo. Você também pode usar outros arquivos de configuração, que você faz referência a esses arquivos.
+
+No exemplo abaixo, o *app.Config* é configurado para conectar no banco de dadosasdca 'ProgrammingInCSharpConnection'.
+
+
+```html
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <connectionStrings>
+        <add name="ProgrammingInCSharpConnection" 
+     providerName="System.Data.SqlClient" 
+     connectionString="Data Source=(localdb)\v11.0;Initial Catalog=ProgrammingInCSharp;"
+/>
+    </connectionStrings>
+</configuration>
+```
+
+
+Se você quiser usar a seqüência de conexão em seu aplicativo, você pode usar a propriedade ConfigurationManager.ConnectionStrings do System.Configuration.dll . Você pode acessar seqüências de caracteres de conexão por índice e por nome, como mostrado abaixo.
+
+```csharp
+string connectionString = ConfigurationManager.ConnectionStrings["ProgrammingInCSharpConnection"].ConnectionString;
+
+using (SqlConnection connection = new SqlConnection(connectionString))
+{
+    connection.Open();
+}
+```
+
+Podemos alterar o arquivo *Web.Config* no momento do deploy de nossa aplicação. A maioria dos aplicativos têm configurações na Web. config arquivos que devem ser diferentes quando o aplicativo é implantado. 
+Automatizando o processo de fazer essas alterações evita a necessidade para fazê-las manualmente sempre que você implanta, qual seria entediante e sujeito a erros.
+
+Para maiores informações acessar:
+https://docs.microsoft.com/pt-br/aspnet/web-forms/overview/deployment/visual-studio-web-deployment/web-config-transformations
+
+
+Conectar-se a um banco de dados é uma operação demorada. Ter uma conexão aberta por muito tempo também é um problema porque pode levar outros usuários a não conseguirem se conectar. Para minimizar os custos de abrir e fechar conexões repetidamente, o ADO.NET aplica uma otimização chamada pool de conexões.
+
+Ao usar o SQL Server, um pool de conexões é mantido pelo seu aplicativo. Quando uma nova conexão é solicitada, o .NET Framework verifica se há uma conexão aberta no pool. Se houver, não é necessário abrir uma nova conexão e fazer tudoas etapas iniciais de configuração. Por padrão, o pool de conexões está habilitado, o que pode proporcionar uma grande melhoria de desempenho.
