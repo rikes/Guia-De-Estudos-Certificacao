@@ -872,7 +872,7 @@ string resultado = await cliente.GetStringAsync("http://www.docs.microsoft.net")
 Console.WriteLine(resultado); // Exibe o HTML do site da Microsoft
 ```
 
-### Dados de consumo
+### 4.2 Dados de consumo
 
 O gerenciamento de dados é um dos aspectos mais importantes de um aplicativo. Imagine que você pode criar apenas aplicativos que armazenem seus dados na memória. Assim que o usuário sai, todos os dados são perdidos e os lançamentos subsequentes exigem a reentrada de todos os dados necessários. Claro, isso seria uma situação impossível de se trabalhar.
 
@@ -917,3 +917,88 @@ https://docs.microsoft.com/pt-br/aspnet/web-forms/overview/deployment/visual-stu
 Conectar-se a um banco de dados é uma operação demorada. Ter uma conexão aberta por muito tempo também é um problema porque pode levar outros usuários a não conseguirem se conectar. Para minimizar os custos de abrir e fechar conexões repetidamente, o ADO.NET aplica uma otimização chamada pool de conexões.
 
 Ao usar o SQL Server, um pool de conexões é mantido pelo seu aplicativo. Quando uma nova conexão é solicitada, o .NET Framework verifica se há uma conexão aberta no pool. Se houver, não é necessário abrir uma nova conexão e fazer tudoas etapas iniciais de configuração. Por padrão, o pool de conexões está habilitado, o que pode proporcionar uma grande melhoria de desempenho.
+
+#### SQL Injection
+
+Devemos evitar SQL Injection ao atualizar ou inserir informações em nosso banco.
+
+```csharp
+public async Task InsertRowParameterized()
+{
+    string connectionString = ConfigurationManager.
+        ConnectionStrings["ProgrammingInCSharpConnection"].ConnectionString;
+
+    using (SqlConnection connection = new SqlConnection(connectionString))
+    {
+        SqlCommand command = new SqlCommand(
+            "INSERT INTO People([FirstName], [LastName], [MiddleName]) VALUES (@firstName, @lastName, @middleName)", connection);
+        await connection.OpenAsync();
+        
+        command.Parameters.AddWithValue("@firstName", "John");
+        command.Parameters.AddWithValue("@lastName", "Doe");
+        command.Parameters.AddWithValue("@middleName", "Little");
+
+        int numberOfInsertedRows = await command.ExecuteNonQueryAsync();
+        Console.WriteLine("Inserted {0} rows", numberOfInsertedRows);
+    }
+}
+```
+Nos fontes a um exemplo de *update* e *delete*.
+
+#### WCF - Web Service
+
+O **WCF** é uma parte da .NET Framework que fornece um modelo unificado de programação para construir de forma rápida aplicações distribuidas orientadas a serviço (**SOA**).
+
+* **Service Class** - Uma classe de serviço WCF que implementa um serviço com um conjunto de métodos;
+* **Host Environment** -  Este é o grande diferencial do WCF pois podemos usar qualquer tipo de aplicação como host. Um Host Environment pode ser uma aplicação Console, um Windows Service, um Web Service, uma aplicação WIndows Forms ou o Internet Information Service no caso de um web service normal;
+* **EndPoints** - Todas as comunicações com um serviço WCF irão acontecer via endpoints. O endpoint é composto de 3 partes (ABC´s endpoints):
+  * Address - Consiste em especificar um endereço que define onde o endpoint esta hospedado. Cada endpoint possui um endereço especificado com ele que é usado para identificar e localizar o endpoint. (Geralmente é definido pela instância da classe Uri).
+  * Binding - Especifica como o cliente irá se comunicar (qual transporte será usado: Http, Tcp, Ipc, WS, MSMQ, etc.) com serviço e o endereço onde o endpoint esta hospedado. A definição do Binding pode ser feita no arquivo de configuração ou via programação.
+  * Contract - Especifica um contrato que define quais métodos da classe de Serviço serão acessíveis via endpoint, onde cada endpoint poderá expor um conjunto diferente de métodos; (O contrato é representado por uma Interface que deverá ser decorada com o atributo ServiceContract).
+  *  Address + Binding + Contract = **Endpoint** (o famoso ABC's endpoints) 
+  
+O seguinte exemplo foi implementado no repositório:
+https://msdn.microsoft.com/pt-br/library/bb386386.aspx?f=255&MSPPError=-2147217396
+
+
+*Obs.: Tentei recriar o exemplo acima e um erro era gerado ao tentar compilar o projeto. Acabei desistentido de ter o exemplo no repósitorio.*  
+
+#### XML in .NET
+
+O .NET Framework ajuda você fornecendo classes que podem ser usadas para analisar, criar e editar arquivos XML - na memória e no disco.
+| Nome        | Descrição           |
+| ------------- |:-------------:|
+| XmlReader      | Uma maneira rápida de ler um arquivo XML. Você pode avançar somente pelo arquivo e nada é armazenado em cache. |
+| XmlWriter      | Uma maneira rápida de criar um arquivo XML. Assim como com o XmlReader , ele é somente encaminhado e não armazenado em cache. |
+| XmlDocument    | Representa um documento XML na memória. Suporta navegar e editar um documento. |
+| XPathNavigator | Ajuda na navegação por um documento XML para encontrar informações específicas.  |
+
+Abaixo falarei um pouco mais sobre cada. No repósitorio há três projetos, na qual um arquivo denominado "People.xml" foi adicionando, para exemplificação.
+
+##### XmlReader
+
+Você cria uma nova instância de *XmlReader* usando o método Create estático. Você pode passar este método uma instância de **XmlReaderSettings** para configurar como o XML deve ser analisado. Dessa forma, você pode optar por ignorar dados de seu arquivo XML, como espaço em branco e comentários, ou iniciar em uma determinada posição
+O mesmo já implementa *IDisposable*. De tal modo, usarei a instrunção *using* para garantir o gerenciamento dos recursos.
+
+Quando um XmlReader é primeiro criado e inicializado, não há nenhuma informação disponível. Você deve chamar Read para ler o primeiro nó. Ou seja, o read(), lerá linha a linha de seu XML.
+
+
+##### XmlWriter
+
+Quando você deseja criar um arquivo XML, você pode usar a classe XmlWriter . Essa classe é criada usando o método Create estático e pode ser configurada usando uma instância da classe XmlWriterSettings 
+No exemplo contido no repósitorio, criamos um stream 
+
+##### XmlWriter
+
+Embora XmlReader e XmlWriter sejam as opções mais rápidas, elas definitivamente não são as mais fáceis de usar. Principalmente na leitura de seus dados, 
+é necessário percorrer linha a linha a fim de obter cada atributo e valor. Além disso, devemos conhecer a fundo a estrutura do XML.
+uando você trabalha com documentos relativamente pequenos e desempenho não é tão importante, você pode usar a classe XmlDocument . Sua função principal permite editar arquivos XML e representa o XML de forma hierárquica na memória, permitindo que você navegue facilmente pelo documento e edite elementos no local.
+
+##### JSON
+
+Outro formato popular usado por muitos serviços da Web é o **JavaScript Object Notation (JSON)**. Embora o XML seja útil, ele é detalhado e possui muitas regras relacionadas à estrutura de um documento. O JSON é o que chamamos de alternativa "livre de gordura" ao XML.
+Tem uma gramática mais fácil e muitas vezes carrega significativamente menos peso. 
+Ao trabalhar com XML, você usa classes como XmlWriter , XmlReader e XmlDocument ; O JSON não possui classes como elas. Normalmente, ao trabalhar com JSON, você usa uma biblioteca de serialização que ajuda a converter objetos em JSON e vice-versa. Uma dessas bibliotecas populares é a *Newtonsoft.Json*, que está disponível em http://json.codeplex.com/ 
+
+
+### 4.3 LINQ
