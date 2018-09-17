@@ -14,78 +14,85 @@ namespace _4._1_Task.WhenAll
     {
         static void Main(string[] args)
         {
-            InputReader inputReader = new InputReader('d', 'x');
-            inputReader.CharsMatch += ir_CharsMatch;
+            string nomeArquivo = @"C:\Temp2\async.txt";
 
-            Console.WriteLine("Press d to begin download and x to exit...");
-            while(Console.ReadKey(true).KeyChar != null)
-            {
-                inputReader.CheckInput(Console.ReadKey().KeyChar);
-            }
-            
+            //CreateAndWriteAsyncFile(nomeArquivo);
+            //Console.WriteLine(ReadAsyncHttpRequest().Result);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            Console.WriteLine(ExecuteMultipleRequestsInParallel().Result);
+
+            sw.Stop();
+            Console.WriteLine("Time elapsed: " + sw.Elapsed.TotalSeconds);
+
+            Console.ReadLine();
+
         }
 
-        static async void ir_CharsMatch(object sender, EventArgs e)
+        public static async Task CreateAndWriteAsyncFile(string nomeArquivo)
         {
-            await ExecuteMultipleRequestsInParallel();
+            if (File.Exists(nomeArquivo))
+            {
+                Console.WriteLine("Arquivo existe");
+                //O construtor de *FileStream*, está passando o nome do arquivo, o que faremos com o arqivo no caso criar, o tipo de acesso, se o arquivo será
+                //compartilhado, o tamanho do buffer e por último se será *assincrono*
+                using (FileStream fileStream = new FileStream(nomeArquivo, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
+                {
+                    byte[] data = new byte[1000];
+                    new Random().NextBytes(data);
+
+                    await fileStream.WriteAsync(data, 0, data.Length);
+                }
+            }
         }
 
-        static async Task ExecuteMultipleRequestsInParallel()
+        public static async Task<string[]> ReadAsyncFile(string nomeArquivo)
+        {
+            if (File.Exists(nomeArquivo))
+            {
+                Console.WriteLine("Arquivo existe");
+                var lines = new List<string>();
+                //O construtor de *FileStream*, está passando o nome do arquivo, o que faremos com o arqivo no caso criar, o tipo de acesso, se o arquivo será
+                //compartilhado, o tamanho do buffer e por último se será *assincrono*
+                using (FileStream fileStream = new FileStream(nomeArquivo, FileMode.Open, FileAccess.Read, FileShare.None, 4096, true))
+                using (var reader = new StreamReader(fileStream, Encoding.UTF8))
+                {
+                    string line;
+                    while ((line = await reader.ReadLineAsync()) != null)
+                    {
+                        lines.Add(line);
+                    }
+
+                    return lines.ToArray();
+                }
+            }
+
+            return null;
+        }
+
+        public static async Task<string> ReadAsyncHttpRequest()
         {
             HttpClient client = new HttpClient();
-
-            Task[] tasks = new Task[]
-            {
-                client.GetStringAsync("http://www.imarketplace.com.au"),
-                client.GetStringAsync("http://www.allthecraze.com.au"),
-                client.GetStringAsync("http://www.shopwhiz.com.au")
-            };
-            //tasks[0] = client.GetStringAsync("http://www.imarketplace.com.au");
-            //Task imarketplace = client.GetStringAsync("http://www.imarketplace.com.au");
-            //Task allthecraze = client.GetStringAsync("http://www.allthecraze.com.au");
-            //Task shopwhiz = client.GetStringAsync("http://www.shopwhiz.com.au");
-
-            await Task.WhenAll(tasks);
-            Console.WriteLine("Download complete...");
+            return await client.GetStringAsync("http://www.google.com.br");
         }
-    }
 
-    class InputReader
-    {
-        public event EventHandler CharsMatch;
 
-        private char inputTarget;
-        private char exitChar;
-
-        public InputReader(char inputTarget, char exitChar)
+        public static async Task<string> ExecuteMultipleRequestsInParallel()
         {
-            this.inputTarget = inputTarget;
-            this.exitChar = exitChar;
+            
+            HttpClient client = new HttpClient();
+
+            Task<string> google = client.GetStringAsync("http://www.google.com");
+            Task<string> msdn = client.GetStringAsync("http://msdn.microsoft.com");
+            Task<string> blogs = client.GetStringAsync("http://blogs.msdn.com/");
+            Task<string> globoesporte = client.GetStringAsync("https://globoesporte.globo.com");
+
+            await Task.WhenAll(google, msdn, blogs, globoesporte);
+            //return true;
+
+            return google.Result + msdn.Result + blogs.Result + globoesporte.Result;
         }
 
-        public void CheckInput(char c)
-        {
-            if(c.CompareTo(inputTarget) == 0)
-            {
-                Console.WriteLine("Download commencing...");
-                
-                OnCharsMatch(EventArgs.Empty);
-            }
-            else if(c.CompareTo(exitChar) == 0)
-            {
-                Console.WriteLine("Exiting application in 5 seconds...");
-                Thread.Sleep(5000);
-                Environment.Exit(0);
-            }
-        }
-
-        protected virtual void OnCharsMatch(EventArgs e)
-        {
-            EventHandler handler = CharsMatch;
-            if(handler != null)
-            {
-                handler(this, e);
-            }
-        }
     }
 }
