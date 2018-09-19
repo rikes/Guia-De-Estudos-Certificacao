@@ -38,7 +38,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.1 Streams", "Exam-70-783\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.1 Asynchronous IO Operations", "Exam-70-783\4.1 Asynchronous IO Operations\4.1 Asynchronous IO Operations.csproj", "{6C73C7FF-1069-4F43-9387-5FFEF485463E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.3 LINQ Distinct Method Custom", "Exam-70-783\4.3 LINQ Distinct Method Custom\4.3 LINQ Distinct Method Custom.csproj", "{B935EB30-BB28-4BBD-B30E-A4FEF5A30BDD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.3 LINQ", "Exam-70-783\4.3 LINQ Distinct Method Custom\4.3 LINQ.csproj", "{B935EB30-BB28-4BBD-B30E-A4FEF5A30BDD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3.5 System event log", "Exam-70-783\3.5 System event log\3.5 System event log.csproj", "{44815B5D-006D-4CF5-9DA9-719537690669}"
 EndProject

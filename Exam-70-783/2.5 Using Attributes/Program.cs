@@ -26,22 +26,18 @@ namespace _2._5_Using_Attributes
             Console.ReadKey();
         }
     }
-}
 
 
-
-[Serializable]
-class Person
-{
-    public Person(string FName, string LName)
+    [Serializable]
+    class Person
     {
-        this.FirstName = FName;
-        this.LastName = LName;
+        public Person(string FName, string LName)
+        {
+            this.FirstName = FName;
+            this.LastName = LName;
+        }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
-
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
 }
-
-
-

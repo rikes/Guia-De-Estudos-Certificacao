@@ -64,31 +64,31 @@ namespace _2._4_IEnumerable
             Console.ReadLine();
         }
     }
-}
 
-class Animal
-{
-    public Animal(string nome, string raca)
+    class Animal
     {
-        Nome = nome;
-        Raca = raca;
+        public Animal(string nome, string raca)
+        {
+            Nome = nome;
+            Raca = raca;
+        }
+
+        public string Nome { get; set; }
+        public string Raca { get; set; }
+
+        public override string ToString()
+        {
+            return Nome + "\t" + Raca;
+        }
     }
 
-    public string Nome { get; set; }
-    public string Raca { get; set; }
-
-    public override string ToString()
+    class Animals
     {
-        return Nome + "\t" + Raca;
-    }
-}
+        public Animals(Animal[] animais)
+        {
+            this.animais = animais;
+        }
 
-class Animals
-{
-    public Animals(Animal[] animais)
-    {
-        this.animais = animais;
+        Animal[] animais;
     }
-
-    Animal[] animais;
 }
