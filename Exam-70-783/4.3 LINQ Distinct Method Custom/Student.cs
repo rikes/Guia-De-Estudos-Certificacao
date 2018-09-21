@@ -12,24 +12,10 @@ namespace _4._3_LINQ
         public string Last { get; set; }
         public int ID { get; set; }
 
-        internal static List<Student> Students
-        {
-            get
-            {
-                return students;
-            }
-
-            set
-            {
-                students = value;
-            }
-        }
-
         public List<int> Scores;
 
         // Create a data source by using a collection initializer.
-
-        private static List<Student> students = new List<Student>
+        public List<Student> listaEstudante { get; } = new List<Student>()
         {
             new Student {First = "Svetlana", Last = "Omelchenko", ID = 111, Scores = new List<int> {97, 92, 81, 60}},
             new Student {First = "Claire", Last = "O'Donnell", ID = 112, Scores = new List<int> {75, 84, 91, 39}},
@@ -44,5 +30,11 @@ namespace _4._3_LINQ
             new Student {First = "Eugene", Last = "Zabokritski", ID = 121, Scores = new List<int> {96, 85, 91, 60}},
             new Student {First = "Michael", Last = "Tucker", ID = 122, Scores = new List<int> {94, 92, 91, 91}}
         };
+
+        public Student()
+        {
+            
+        }
+
     }
 }
