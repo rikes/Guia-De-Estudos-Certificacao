@@ -22,7 +22,7 @@ namespace _4._2_XmlReader
             using(XmlReader xmlReader = XmlReader.Create("People.xml", new XmlReaderSettings() { IgnoreWhitespace = true}))
             {
                 
-                while (xmlReader.)
+                while (xmlReader.CanReadBinaryContent)
                 {
                     xmlReader.MoveToContent();
                     xmlReader.ReadStartElement("person");

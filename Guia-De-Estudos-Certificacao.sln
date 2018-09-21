@@ -38,7 +38,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.1 Streams", "Exam-70-783\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.1 Asynchronous IO Operations", "Exam-70-783\4.1 Asynchronous IO Operations\4.1 Asynchronous IO Operations.csproj", "{6C73C7FF-1069-4F43-9387-5FFEF485463E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.3 LINQ Distinct Method Custom", "Exam-70-783\4.3 LINQ Distinct Method Custom\4.3 LINQ Distinct Method Custom.csproj", "{B935EB30-BB28-4BBD-B30E-A4FEF5A30BDD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.3 LINQ", "Exam-70-783\4.3 LINQ Distinct Method Custom\4.3 LINQ.csproj", "{B935EB30-BB28-4BBD-B30E-A4FEF5A30BDD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3.5 System event log", "Exam-70-783\3.5 System event log\3.5 System event log.csproj", "{44815B5D-006D-4CF5-9DA9-719537690669}"
 EndProject
@@ -131,6 +131,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.1 DriverInfo", "Exam-70-783\4.1 DriverInfo\4.1 DriverInfo.csproj", "{A987E53D-0F77-41BE-B347-B5F1F525AAEE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.1 File", "Exam-70-783\4.1 File\4.1 File.csproj", "{DA17C999-2C4D-493D-BE7E-20EA0A4E58F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.3 XML to LINQ", "Exam-70-783\4.3 XML to LINQ\4.3 XML to LINQ.csproj", "{A8FA2376-4EEF-4F2D-9205-D590745BE4DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -378,6 +380,10 @@ Global
 		{DA17C999-2C4D-493D-BE7E-20EA0A4E58F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA17C999-2C4D-493D-BE7E-20EA0A4E58F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA17C999-2C4D-493D-BE7E-20EA0A4E58F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8FA2376-4EEF-4F2D-9205-D590745BE4DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8FA2376-4EEF-4F2D-9205-D590745BE4DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8FA2376-4EEF-4F2D-9205-D590745BE4DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8FA2376-4EEF-4F2D-9205-D590745BE4DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -443,5 +449,6 @@ Global
 		{51DA33A8-4536-4F51-A842-DAC5B674A18B} = {B9350AAB-2463-458C-9353-0BDB5F8A716B}
 		{A987E53D-0F77-41BE-B347-B5F1F525AAEE} = {B9350AAB-2463-458C-9353-0BDB5F8A716B}
 		{DA17C999-2C4D-493D-BE7E-20EA0A4E58F5} = {B9350AAB-2463-458C-9353-0BDB5F8A716B}
+		{A8FA2376-4EEF-4F2D-9205-D590745BE4DA} = {B9350AAB-2463-458C-9353-0BDB5F8A716B}
 	EndGlobalSection
 EndGlobal

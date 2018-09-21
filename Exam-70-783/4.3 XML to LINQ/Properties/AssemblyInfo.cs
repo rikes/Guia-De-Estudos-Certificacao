@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("4.2 WCF (Web Service)")]
+[assembly: AssemblyTitle("4.3 XML to LINQ")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("4.2 WCF (Web Service)")]
+[assembly: AssemblyProduct("4.3 XML to LINQ")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("67340756-994b-4a88-8677-f10f49178632")]
+[assembly: Guid("a8fa2376-4eef-4f2d-9205-d590745be4da")]
 
 // Version information for an assembly consists of the following four values:
 //
