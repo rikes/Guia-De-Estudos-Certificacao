@@ -13,12 +13,17 @@ namespace _4._4_JSON_serialization
     {
         static void Main(string[] args)
         {
-            Product prod = new Product();
-            prod.id = 1;
-            prod.name = "Kit Kat";
-            prod.price = 2.50m;
+            //Lembrando que o Id e Desc nao sera serializado/salvo
+            Product prod = new Product
+            {
+                id = 3,
+                name = "Kit Kat",
+                price = 2.50m,
+                desc = "Meio Amargo"
+            };
 
             // Serialize
+            //Sera salvo na pasta /bin/Debug
             Stream stream = new FileStream("Product.json", FileMode.Create);
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Product));
             ser.WriteObject(stream, prod); // Note: call WriteObject method instead of Serialize
@@ -30,6 +35,11 @@ namespace _4._4_JSON_serialization
             DataContractJsonSerializer ser2 = new DataContractJsonSerializer(typeof(Product));
             prod2 = (Product)ser.ReadObject(stream2); // Note: call ReadObject method instead of Deserialize
             stream2.Close();
+
+
+            Console.WriteLine("Id: {0} \nName: {1} \nprice {2:C} \nDesc {3}", prod2.id, prod2.name, prod2.price, prod2.desc);
+
+            Console.ReadLine();
         }
     }
 }

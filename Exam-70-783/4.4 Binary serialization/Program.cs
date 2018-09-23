@@ -14,10 +14,12 @@ namespace _4._4_Binary_serialization
     {
         static void Main(string[] args)
         {
-            Product prod = new Product();
-            prod.name = "Candy Bar";
-            prod.price = 1.95m;
-            prod.id = 1;
+            Product prod = new Product
+            {
+                name = "Candy Bar",
+                price = 1.95m,
+                id = 1
+            };
 
             IFormatter formatter = new BinaryFormatter();
 
@@ -30,6 +32,11 @@ namespace _4._4_Binary_serialization
             stream = new FileStream("Product.bin", FileMode.Open, FileAccess.Read, FileShare.Read);
             Product prod2 = (Product)formatter.Deserialize(stream);
             stream.Close();
+
+            Console.WriteLine("Id: {0} \nName: {1} \nprice {2:C}", prod2.id, prod2.name, prod2.price);
+
+            Console.ReadLine();
+
         }
     }
 }
