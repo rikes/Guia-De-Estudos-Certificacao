@@ -1095,7 +1095,9 @@ Quando você deseja otimizar a quantidade de dados que precisa serializar, é po
 
 
 Ao trabalhar com o *XmlSerializer* , é importante marcar seus tipos com o atributo **[Serializable]** , parte da classe *SerializableAttribute* . Isso informa ao .NET Framework que seu tipo deve ser serializável. Ele irá verificar o seu objeto e todos os objetos que ele faz referência para se certificar de que ele pode serializar todo o gráfico.
-Se isso não for possível, você receberá uma exceção em tempo de execução
+Se isso não for possível, você receberá uma exceção em tempo de execução.
+
+Serialização XML pode ser feita usando o *XmlSerializer*.
 
 ```csharp
 [Serializable]
@@ -1103,9 +1105,15 @@ public class Person
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public int Age { get; set; }
+    
+    [XmlIgnore]
+    private int Age { get; set; }
+    
+    [XmlIgnore]
+    public string desc {private get; set}
 }
 ```
+Atributos de acesso privados não podem ser serializados, nesses caso a tag *[XmlIgnore]* é necessária.
 Exemplo no repósitorio.
 
 
@@ -1115,6 +1123,8 @@ O *XmlSerializer* produz texto legível por humanos. Você pode abri-lo no Bloco
 Você também pode serializar dados que não são adequados para um formato XML, como uma **imagem**.
 
 Em essência, usando serialização binária parece usando o *XmlSerializer*. Você precisa marcar um item com o *SerializableAttribute* e, em seguida, usar a instância do *serializador binário* para serializar um objeto ou um gráfico de objeto em um *stream*.
+É importante implementar verificações de segurança em seu construtor. Dessa forma, você pode ter certeza de que ninguém adulterou os dados serializados.
+A serialização binária pode ser feita usando a classe BinaryFormatter.
 
 ```csharp
 IFormatter formatter = new BinaryFormatter();
@@ -1128,4 +1138,53 @@ using (Stream stream = new FileStream("data.bin", FileMode.Open))
     Person dp = (Person)formatter.Deserialize(stream);
 }
 ```
+Assim como no Xml, atributos de acesso não são serializados. Caso seja essa a intenção a tag *[NonSerialized]* deve ser utilizada.
 Exemplo no repósitorio.
+
+
+##### Web Service Serialization - DataContract
+
+Quando seus tipos são usados no WCF, eles são serializados para que possam ser enviados para outros aplicativos. O serializador de contrato de dados é usado pelo WCF para serializar seus objetos para XML ou JSON.
+
+O exemplo abaixo mostra como você pode criar um **DataContract** para a classe *Person*.
+O campo *isDirty* é ignorado e ambas as propriedades *Id* e *Name* serão serializadas, até mesmo o campo *Idade* que é privado.
+
+```csharp
+[DataContract]
+classe pública PersonDataContract
+{
+    [DataMember]
+    public int Id {get; set; }
+
+    [DataMember]
+    public string Nome {get; set; }
+
+    [DataMember]
+    private string Idade {get; set; }
+    
+    private bool isDirty = false;
+}
+```
+
+Na próxima sessão usaremos para gerar um arquivo JSON.
+
+##### JSON
+
+JSON é um formato especial que é especificamente útil ao enviar pequenas quantidades de dados entre um servidor da Web e um cliente usando JavaScript e XML assíncrono (AJAX).
+Normalmente, seus dados são serializados automaticamente quando você usa um ponto de extremidade WCF AJAX ou ASP.NET WebApi.
+No exemplo abaixo será feito uma serializaçãod e desserialização do objeto "Produto" usando a classe *DataContractJsonSerializer*.
+
+```csharp
+// Serialize
+Stream stream = new FileStream("Product.json", FileMode.Create);
+DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Product));
+ser.WriteObject(stream, prod); // Note: call WriteObject method instead of Serialize
+stream.Close();
+
+// Deserialize
+Product prod2 = new Product();
+Stream stream2 = new FileStream("Product.json", FileMode.Open);
+DataContractJsonSerializer ser2 = new DataContractJsonSerializer(typeof(Product));
+prod = (Product)ser.ReadObject(stream2); // Note: call ReadObject method instead of Deserialize
+```
+
