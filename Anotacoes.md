@@ -1002,3 +1002,189 @@ Ao trabalhar com XML, você usa classes como XmlWriter , XmlReader e XmlDocument
 
 
 ### 4.3 LINQ
+
+Ao longo dos capítulos fizemos o uso do LINQ em diversos momentos, nesse capítulo iremos formalizar alguns conceitos e exemplificar outros.
+
+#### Expressão Lambda
+
+Para entender o que é uma expressão lambda, é importante que você primeiro saiba o que é um método anônimo. Métodos anônimos foram introduzidos no C # 2.0 para permitir que você crie um método embutido em algum código, atribua-o a uma variável e passe-o de volta.
+Exemplo de uma método anônimo abreviado por *lambda* de multiplicação.
+
+
+```csharp
+Func <int, int> myDelegate = x => x * 3;
+Console.WriteLine(myDelegate (10)); // 30
+```
+
+#### Extension Methods
+
+*Extension Methods* podem ser usados para estender um tipo existente com novo comportamento sem usar herança. Um método de extensão é definido em uma classe estática e usa a palavra-chave *this* para se marcar como um método de extensão.
+O exemplo abaixo cria uma classe com as extensões para o tipo *int*, neste caso temos acesso ao método *Multiply*.
+
+```csharp
+public static class IntExtensions
+{
+    public static int Multiply(this int x, int y)
+    {
+        return x * y;
+    }
+}
+int x = 2;
+Console.WriteLine(x.Multiply(10)); // 20
+```
+
+#### Query
+
+Ao trabalhar com dados, seja na memória, em um banco de dados ou em um arquivo.
+Todo provedor de LINQ é incentivado a implementar os operadores de consulta padrão para que você possa usá-los sempre. Isso significa que você pode usar esses operadores padrão em quase todas as fontes de dados, fornecendo uma experiência consistente.
+Os operadores de consulta padrão são: *All, Any, Average, Cast, Count, Distinct, GroupBy, Join, Max, Min, OrderBy, OrderByDescending, Select, SelectMany, Skip, SkipWhile, Sum, Take, Take-While, ThenBy, ThenByDescending, and Where*.
+Todos as operações de consulta LINQ consistem em três ações distintas:
+
+1. Obter a fonte de dados.
+ 
+2. Criar a consulta.
+
+3. Executar a consulta.
+
+
+Exemplo do operador *Select*
+
+
+
+```csharp
+int[] data = { 1, 2, 5, 8, 11 };
+var result = from d in data 
+             select d;
+Console.WriteLine(string.Join(", ", result)); // 1, 2, 5, 8, 11
+```
+
+Através dos métodos anônimos, podemos utilizar uma projeção (*projection*) para agrupar(*grouping*) nossos dados da forma que quisermos. utilizando a instrução *Select new*, podemos selecionar apenas as propriedades que precisamos.
+Exemplo:
+
+```csharp
+var result = from o in orders
+             from l in o.OrderLines
+             group l by l.Product into p
+             select new
+                 {
+                    Product = p.Key,
+                    Amount = p.Sum(x => x.Amount)
+                 };
+```
+
+#### LINQ XML
+
+Se você quiser consultar um arquivo XML com LINQ para XML, você pode usar a classe *XDocument* para carregar um arquivo ou uma string contendo XML na memória. A classe *XDocument* trabalha com objetos do tipo *XNode*.
+*XNode* é uma classe abstrata que representa a ideia de algum segmento de conteúdo que um documento contém. Você pode usar *XDocument.Nodes* para acessar os nós que formam um arquivo XML, ou você pode usar *XDocument.Descendants* ou *XDocument.Elements* para procurar por um conjunto específico de nós.
+Um dos ótimos recursos do *XDocumentclasse* é que representa o arquivo XML de forma hierárquica. Devido a isso, você pode mover de um nó para nós filhos e voltar para o nó pai.
+Existe um exemplo no repósitorio.
+
+
+### 4.4 Serialize and Deserialize
+
+Ao criar seus aplicativos, você frequentemente trocará dados com outros aplicativos. Ao enviar dados para um serviço da Web ou por meio de um fluxo de rede, você primeiro precisa transformar seus dados em um formato simples ou binário. 
+Quando você recebe dados, você precisa transformar os dados planos ou binários nos objetos com os quais deseja trabalhar. Esse processo é chamado de serialização(*Serialize*) e desserialização(*Deserialize*).
+
+#### Serializando e Deserializando dados
+
+Você usa serialização quando precisa trocar dados com outro aplicativo. Essa troca pode ser feita através de uma rede ou quando você armazena dados em um banco de dados ou arquivo.
+A serialização serializa apenas os dados que um objeto armazena. Os métodos não são serializados. Quando você desserializa um objeto, você precisa acessar a definição de classe original ou terminará com um objeto que armazena apenas dados.
+Quando você deseja otimizar a quantidade de dados que precisa serializar, é possível criar um *data transfer object* (DTO) personalizado que contenha apenas os dados específicos necessários.
+
+##### XmlSerializer
+
+
+Ao trabalhar com o *XmlSerializer* , é importante marcar seus tipos com o atributo **[Serializable]** , parte da classe *SerializableAttribute* . Isso informa ao .NET Framework que seu tipo deve ser serializável. Ele irá verificar o seu objeto e todos os objetos que ele faz referência para se certificar de que ele pode serializar todo o gráfico.
+Se isso não for possível, você receberá uma exceção em tempo de execução.
+
+Serialização XML pode ser feita usando o *XmlSerializer*.
+
+```csharp
+[Serializable]
+public class Person
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    
+    [XmlIgnore]
+    private int Age { get; set; }
+    
+    [XmlIgnore]
+    public string desc {private get; set}
+}
+```
+Atributos de acesso privados não podem ser serializados, nesses caso a tag *[XmlIgnore]* é necessária.
+Exemplo no repósitorio.
+
+
+##### Binary Serialization
+
+O *XmlSerializer* produz texto legível por humanos. Você pode abri-lo no Bloco de Notas, por exemplo, para inspecioná-lo e editá-lo. Mas a legibilidade humana do arquivo também aumenta seu tamanho. Usando um formato binário(*binary format*), você obtém um resultado menor.
+Você também pode serializar dados que não são adequados para um formato XML, como uma **imagem**.
+
+Em essência, usando serialização binária parece usando o *XmlSerializer*. Você precisa marcar um item com o *SerializableAttribute* e, em seguida, usar a instância do *serializador binário* para serializar um objeto ou um gráfico de objeto em um *stream*.
+É importante implementar verificações de segurança em seu construtor. Dessa forma, você pode ter certeza de que ninguém adulterou os dados serializados.
+A serialização binária pode ser feita usando a classe BinaryFormatter.
+
+```csharp
+IFormatter formatter = new BinaryFormatter();
+using (Stream stream = new FileStream("data.bin", FileMode.Create))
+{
+    formatter.Serialize(stream, p);
+}
+
+using (Stream stream = new FileStream("data.bin", FileMode.Open))
+{
+    Person dp = (Person)formatter.Deserialize(stream);
+}
+```
+Assim como no Xml, atributos de acesso não são serializados. Caso seja essa a intenção a tag *[NonSerialized]* deve ser utilizada.
+Exemplo no repósitorio.
+
+
+##### Web Service Serialization - DataContract
+
+Quando seus tipos são usados no WCF, eles são serializados para que possam ser enviados para outros aplicativos. O serializador de contrato de dados é usado pelo WCF para serializar seus objetos para XML ou JSON.
+
+O exemplo abaixo mostra como você pode criar um **DataContract** para a classe *Person*.
+O campo *isDirty* é ignorado e ambas as propriedades *Id* e *Name* serão serializadas, até mesmo o campo *Idade* que é privado.
+
+```csharp
+[DataContract]
+classe pública PersonDataContract
+{
+    [DataMember]
+    public int Id {get; set; }
+
+    [DataMember]
+    public string Nome {get; set; }
+
+    [DataMember]
+    private string Idade {get; set; }
+    
+    private bool isDirty = false;
+}
+```
+
+Na próxima sessão usaremos para gerar um arquivo JSON.
+
+##### JSON
+
+JSON é um formato especial que é especificamente útil ao enviar pequenas quantidades de dados entre um servidor da Web e um cliente usando JavaScript e XML assíncrono (AJAX).
+Normalmente, seus dados são serializados automaticamente quando você usa um ponto de extremidade WCF AJAX ou ASP.NET WebApi.
+No exemplo abaixo será feito uma serializaçãod e desserialização do objeto "Produto" usando a classe *DataContractJsonSerializer*.
+
+```csharp
+// Serialize
+Stream stream = new FileStream("Product.json", FileMode.Create);
+DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Product));
+ser.WriteObject(stream, prod); // Note: call WriteObject method instead of Serialize
+stream.Close();
+
+// Deserialize
+Product prod2 = new Product();
+Stream stream2 = new FileStream("Product.json", FileMode.Open);
+DataContractJsonSerializer ser2 = new DataContractJsonSerializer(typeof(Product));
+prod = (Product)ser.ReadObject(stream2); // Note: call ReadObject method instead of Deserialize
+```
+
