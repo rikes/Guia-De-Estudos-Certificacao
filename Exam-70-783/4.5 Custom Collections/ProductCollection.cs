@@ -10,6 +10,7 @@ namespace _4._5_Custom_Collections
 {
     class ProductCollection : CollectionBase // Custom Collections must inherit from CollectionBase class
     {
+        //List vem da base
         public void Add(Product prod)
         {
             List.Add(prod);
@@ -23,6 +24,7 @@ namespace _4._5_Custom_Collections
             List.Remove(prod);
         }
         // Indexer for referencing the collection by index
+        //Para obter e setar por posição 
         public Product this[int index]
         {
             get
