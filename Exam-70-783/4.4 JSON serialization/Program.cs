@@ -22,6 +22,11 @@ namespace _4._4_JSON_serialization
                 desc = "Meio Amargo"
             };
 
+            if (prod.id.HasValue)
+            {
+                Console.WriteLine("Tem valor!!!!");
+            }
+
             // Serialize
             //Sera salvo na pasta /bin/Debug
             Stream stream = new FileStream("Product.json", FileMode.Create);
