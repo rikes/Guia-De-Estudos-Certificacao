@@ -13,8 +13,13 @@ namespace _4._4_JSON_serialization
     {
         static void Main(string[] args)
         {
+            UpdateJson update = new UpdateJson();
+
+            update.RemoveCarcter();
+
+
             //Lembrando que o Id e Desc nao sera serializado/salvo
-            Product prod = new Product
+            /*Product prod = new Product
             {
                 id = 3,
                 name = "Kit Kat",
@@ -43,7 +48,7 @@ namespace _4._4_JSON_serialization
 
 
             Console.WriteLine("Id: {0} \nName: {1} \nprice {2:C} \nDesc {3}", prod2.id, prod2.name, prod2.price, prod2.desc);
-
+            */
             Console.ReadLine();
         }
     }
